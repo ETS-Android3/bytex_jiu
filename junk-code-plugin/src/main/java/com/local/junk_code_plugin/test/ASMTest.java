@@ -112,4 +112,7 @@ public class ASMTest {
         return context2;
     }
 
+    class A{
+
+    }
 }

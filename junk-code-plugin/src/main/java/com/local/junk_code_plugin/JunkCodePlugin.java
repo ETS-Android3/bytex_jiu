@@ -24,7 +24,8 @@ public class JunkCodePlugin extends CommonPlugin<JunkCodeExtension, JunkCodeCont
 
     @Override
     public boolean transform(@Nonnull String relativePath, @Nonnull ClassVisitorChain chain) {
-        if (context.needJunkClass(relativePath.substring(0, relativePath.lastIndexOf('.')))) {
+        String name = relativePath.substring(0, relativePath.lastIndexOf('.'));
+        if (!name.contains("$")&&context.needJunkClass(name)) {
             chain.connect(new JunkCodeClassVisitor(context));
         }
         return super.transform(relativePath, chain);
