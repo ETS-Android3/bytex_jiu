@@ -3,6 +3,7 @@ package com.local.junk_code_plugin;
 import com.android.build.gradle.AppExtension;
 import com.local.junk_code_plugin.visitors.JunkCodeClassVisitor;
 import com.ss.android.ugc.bytex.common.CommonPlugin;
+import com.ss.android.ugc.bytex.common.TransformConfiguration;
 import com.ss.android.ugc.bytex.common.visitor.ClassVisitorChain;
 import com.ss.android.ugc.bytex.pluginconfig.anno.PluginConfig;
 
@@ -31,8 +32,15 @@ public class JunkCodePlugin extends CommonPlugin<JunkCodeExtension, JunkCodeCont
         return super.transform(relativePath, chain);
     }
 
-//    @Override
-//    public int flagForClassWriter() {
-//        return ClassWriter.COMPUTE_FRAMES;
-//    }
+
+    @Nonnull
+    @Override
+    public TransformConfiguration transformConfiguration() {
+        return new TransformConfiguration() {
+            @Override
+            public boolean isIncremental() {
+                return false;
+            }
+        };
+    }
 }
