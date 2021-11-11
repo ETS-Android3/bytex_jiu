@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  */
 public class JunkCodeContext extends BaseContext<JunkCodeExtension> {
 
-    private static final String[] defTypeArr = {"Ljava/lang/Byte;", "Ljava/lang/Short;", "Ljava/lang/Integer;", "Ljava/lang/Long;", "Ljava/lang/Float;", "Ljava/lang/Double;", "Ljava/lang/Character;", "Ljava/lang/Boolean;", "Ljava/lang/String;", "Ljava/lang/Object;"};
+    private static final String[] defTypeArr = {"Ljava/lang/Byte;", "Ljava/lang/Integer;", "Ljava/lang/Long;", "Ljava/lang/Float;", "Ljava/lang/Boolean;", "Ljava/lang/String;"};
 
     private final List<Pattern> whiteListPattern = new ArrayList<>();
     private final List<Pattern> onlyJunkPattern = new ArrayList<>();

@@ -46,7 +46,7 @@ junk_code_plugin {
             "Lcom/ss/android/ugc/bytex/example/log/LogTest;"
     ]
     onlyJunkClassList = [
-            "com/ss/android/ugc/bytex/example/junk/JunkFieldTest"
+            "com/ss/android/ugc/bytex/example/junk/*"
     ]
     whiteList = [
 

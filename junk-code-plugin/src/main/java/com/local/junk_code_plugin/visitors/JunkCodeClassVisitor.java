@@ -1,17 +1,23 @@
 package com.local.junk_code_plugin.visitors;
 
+
 import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
 import static org.objectweb.asm.Opcodes.ACC_INTERFACE;
 import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
+import static org.objectweb.asm.Opcodes.ACC_STATIC;
 
 import com.local.junk_code_plugin.JunkCodeContext;
+import com.ss.android.ugc.bytex.common.Constants;
 import com.ss.android.ugc.bytex.common.visitor.BaseClassVisitor;
 
 import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.MethodVisitor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 /**
  * Created on 2021/9/1 15:03
@@ -19,12 +25,14 @@ import java.util.Random;
 public class JunkCodeClassVisitor extends BaseClassVisitor {
 
     private static final Random random = new Random();
-
+    private static final Pattern p = Pattern.compile(".*\\d+.*");
     private static final char[] abc = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 
     private final JunkCodeContext context;
     private boolean skip = false;//是否跳过
     private String className = "";
+
+    private final List<GenerateMethodInfo> methodList = new ArrayList<>();
 
     public JunkCodeClassVisitor(JunkCodeContext context) {
         this.context = context;
@@ -38,6 +46,19 @@ public class JunkCodeClassVisitor extends BaseClassVisitor {
         className = name;
         if (skip) {
             context.getLogger().d("skipClass", "className:" + className);
+        } else if (context.getMethodCount() > 0) {
+            generateMethodParam();
+        }
+    }
+
+    @Override
+    public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
+        MethodVisitor methodVisitor = super.visitMethod(access, name, descriptor, signature, exceptions);
+        if (skip || ((access & ACC_STATIC) != 0) || name.equals("<init>") || p.matcher(name).matches())
+            return methodVisitor;
+        else {
+//            return methodVisitor;
+            return new JunkCodeMethodVisitor(methodVisitor);
         }
     }
 
@@ -56,6 +77,35 @@ public class JunkCodeClassVisitor extends BaseClassVisitor {
         super.visitEnd();
     }
 
+    private class JunkCodeMethodVisitor extends MethodVisitor {
+
+
+        public JunkCodeMethodVisitor(MethodVisitor methodVisitor) {
+            super(Constants.ASM_API, methodVisitor);
+        }
+
+        @Override
+        public void visitCode() {
+            GenerateMethodInfo methodInfo = methodList.get(random.nextInt(methodList.size()));
+            GenerateVMTool.junkCodeMethod(mv, methodInfo, className);
+            super.visitCode();
+        }
+    }
+
+
+    /**
+     * method param
+     */
+    private void generateMethodParam() {
+        for (int i = 0; i < context.getMethodCount(); i++) {
+            int index = random.nextInt(15);
+//            int index = 2;
+            String methodName = generateName(i);
+            String junkClassName = getJunkClassName();
+            methodList.add(new GenerateMethodInfo(index, methodName, junkClassName, GenerateVMTool.getIntegerType()));
+        }
+    }
+
     /**
      * 类添加属性
      */
@@ -72,9 +122,12 @@ public class JunkCodeClassVisitor extends BaseClassVisitor {
      * 类添加方法
      */
     private void addJunkMethod() {
-        for (int i = 0; i < context.getMethodCount(); i++) {
-            int index = random.nextInt(15);
-            String methodName = generateName(index);
+        for (int i = 0; i < methodList.size(); i++) {
+            GenerateMethodInfo methodInfo = methodList.get(i);
+            int index = methodInfo.index;
+            String methodName = methodInfo.methodName;
+            String junkClassName = methodInfo.junkClass;
+            String integerType = methodInfo.integerType;
             if (index == 0) {
                 GenerateVMTool.method1(this, methodName);
             } else if (index == 1) {
@@ -84,27 +137,27 @@ public class JunkCodeClassVisitor extends BaseClassVisitor {
             } else if (index == 3) {
                 GenerateVMTool.method4(this, methodName);
             } else if (index == 4) {
-                GenerateVMTool.method5(this, methodName);
+                GenerateVMTool.method5(this, methodName, integerType);
             } else if (index == 5) {
-                GenerateVMTool.method6(this, methodName);
+                GenerateVMTool.method6(this, methodName, integerType);
             } else if (index == 6) {
-                GenerateVMTool.method7(this, methodName);
+                GenerateVMTool.method7(this, methodName, integerType);
             } else if (index == 7) {
-                GenerateVMTool.method8(this, methodName);
+                GenerateVMTool.method8(this, methodName, integerType);
             } else if (index == 8) {
-                GenerateVMTool.method9(this, methodName, getJunkClassName());
+                GenerateVMTool.method9(this, methodName, junkClassName);
             } else if (index == 9) {
-                GenerateVMTool.method10(this, methodName, getJunkClassName());
+                GenerateVMTool.method10(this, methodName, junkClassName);
             } else if (index == 10) {
-                GenerateVMTool.method11(this, methodName, getJunkClassName());
+                GenerateVMTool.method11(this, methodName, junkClassName, integerType);
             } else if (index == 11) {
-                GenerateVMTool.method12(this, methodName, getJunkClassName());
+                GenerateVMTool.method12(this, methodName, junkClassName, integerType);
             } else if (index == 12) {
-                GenerateVMTool.method13(this, methodName, getJunkClassName());
+                GenerateVMTool.method13(this, methodName, junkClassName);
             } else if (index == 13) {
-                GenerateVMTool.method14(this, methodName, getJunkClassName());
+                GenerateVMTool.method14(this, methodName, junkClassName);
             } else if (index == 14) {
-                GenerateVMTool.method15(this, methodName, getJunkClassName());
+                GenerateVMTool.method15(this, methodName, junkClassName);
             }
         }
     }

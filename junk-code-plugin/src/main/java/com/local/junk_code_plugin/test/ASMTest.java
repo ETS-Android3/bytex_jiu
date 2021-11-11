@@ -2,7 +2,9 @@ package com.local.junk_code_plugin.test;
 
 import com.local.junk_code_plugin.JunkCodeContext;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Created on 2021/9/1 16:15
@@ -21,7 +23,7 @@ public class ASMTest {
     private Object _j;
 
 
-    private void method1(String param) {
+    public void method1(String param) {
         long now = System.currentTimeMillis();
         if (System.currentTimeMillis() < now) {
             System.out.println("test!!");
@@ -31,11 +33,12 @@ public class ASMTest {
     }
 
     private void method2() {
-        throw new RuntimeException();
+        if (getClass().isAnnotation())
+            throw new RuntimeException();
     }
 
     private String method3() {
-        if (System.currentTimeMillis() > 0)
+        if (System.currentTimeMillis() < 0)
             throw new RuntimeException();
         else {
             return null;
@@ -44,18 +47,18 @@ public class ASMTest {
 
 
     private int method4() {
-        if (System.currentTimeMillis() > 0)
+        if (System.currentTimeMillis() < 0)
             return 1;
         else {
             return 0;
         }
     }
 
-    private long method5(byte a, byte b) {
+    private long method5(byte a, short b) {
         return a + b;
     }
 
-    private int method6(byte a, byte b) {
+    private int method6(byte a, int b) {
         return a - b;
     }
 
@@ -112,7 +115,94 @@ public class ASMTest {
         return context2;
     }
 
-    class A{
-
+    private void m1() {
+        method1("1");
+        System.out.println("end");
     }
+
+    private void m2() {
+        if (getClass().getName().isEmpty()) {
+            this.method2();
+        }
+        System.out.println("end");
+    }
+
+    private void m3() {
+        if (System.currentTimeMillis() < 0) {
+            method3();
+        }
+        System.out.println("end");
+    }
+
+    private void m4() {
+        method4();
+    }
+
+    private void m5() {
+        method5((byte) 100, (byte) 100);
+        System.out.println("end");
+    }
+
+    private void m6() {
+        if (this.hashCode() == 0)
+            method6((byte) 100, (byte) 100);
+        System.out.println("end");
+    }
+
+    private void m7() {
+        if (this.getClass() == null) {
+            method7("333", (short) 100);
+        }
+        System.out.println("end");
+    }
+
+    private void m8() {
+        method8(new Date(), 100);
+        System.out.println("end");
+    }
+
+    private void m9() {
+        if (getClass().isEnum() && getClass().isArray()) {
+            method9(null);
+        }
+        System.out.println("end");
+    }
+
+    private void m10() {
+        if (getClass().getName().startsWith("_"))
+            method10(null);
+        System.out.println("end");
+    }
+
+    private void m11() {
+        if (getClass().getSimpleName().endsWith("_"))
+            method11(null, (short) 100);
+        System.out.println("end");
+    }
+
+    private void m12() {
+        if (Math.random() < 0) {
+            method12(null, (byte) 0);
+            System.out.println("end");
+        }
+    }
+
+    private void m13() {
+        if (Objects.isNull(getClass()))
+            method13("2", "3");
+        System.out.println("end");
+    }
+
+    private void m14() {
+        if (getClass().getName().equals("_")) {
+            method14(null, "");
+        }
+        System.out.println("end");
+    }
+
+    private void m15() {
+        method15(null, null);
+        System.out.println("end");
+    }
+
 }

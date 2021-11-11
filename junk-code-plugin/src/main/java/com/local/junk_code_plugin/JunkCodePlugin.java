@@ -8,7 +8,6 @@ import com.ss.android.ugc.bytex.common.visitor.ClassVisitorChain;
 import com.ss.android.ugc.bytex.pluginconfig.anno.PluginConfig;
 
 import org.gradle.api.Project;
-import org.objectweb.asm.ClassWriter;
 
 import javax.annotation.Nonnull;
 
@@ -26,7 +25,7 @@ public class JunkCodePlugin extends CommonPlugin<JunkCodeExtension, JunkCodeCont
     @Override
     public boolean transform(@Nonnull String relativePath, @Nonnull ClassVisitorChain chain) {
         String name = relativePath.substring(0, relativePath.lastIndexOf('.'));
-        if (!name.contains("$")&&context.needJunkClass(name)) {
+        if (!name.contains("$") && context.needJunkClass(name)) {
             chain.connect(new JunkCodeClassVisitor(context));
         }
         return super.transform(relativePath, chain);
