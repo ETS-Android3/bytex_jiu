@@ -9,6 +9,9 @@ public class GenerateMethodInfo {
     public String junkClass;
     public String integerType;
 
+    public String descriptor;
+    public int paramSize;
+
     public GenerateMethodInfo(int index, String methodName, String junkClass, String integerType) {
         this.index = index;
         this.methodName = methodName;

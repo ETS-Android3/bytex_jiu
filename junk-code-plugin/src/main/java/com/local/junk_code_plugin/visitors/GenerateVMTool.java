@@ -324,6 +324,26 @@ public class GenerateVMTool {
         methodVisitor.visitEnd();
     }
 
+    static void method16(ClassVisitor classVisitor, String methodName, String descriptor) {
+        MethodVisitor methodVisitor = classVisitor.visitMethod(getMethodAccess(methodName), methodName, descriptor, null, null);
+        methodVisitor.visitCode();
+        methodVisitor.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+        methodVisitor.visitVarInsn(ALOAD, 0);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "getClass", "()Ljava/lang/Class;", false);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Class", "getName", "()Ljava/lang/String;", false);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+        methodVisitor.visitInsn(RETURN);
+        methodVisitor.visitMaxs(2, 5);
+        methodVisitor.visitEnd();
+    }
+
+    /**
+     * 方法中插入代码
+     *
+     * @param methodVisitor
+     * @param methodInfo
+     * @param className
+     */
     static void junkCodeMethod(MethodVisitor methodVisitor, GenerateMethodInfo methodInfo, String className) {
         int ifIndex = random.nextInt(10);
         String methodName = methodInfo.methodName;
@@ -510,6 +530,12 @@ public class GenerateVMTool {
             methodVisitor.visitInsn(ACONST_NULL);
             methodVisitor.visitMethodInsn(INVOKESPECIAL, className, methodName, "(" + junkClassName + junkClassName + ")" + junkClassName, false);
             methodVisitor.visitInsn(POP);
+        } else {
+            methodVisitor.visitVarInsn(ALOAD, 0);
+            for (int i = 0; i < methodInfo.paramSize; i++) {
+                methodVisitor.visitInsn(ACONST_NULL);
+            }
+            methodVisitor.visitMethodInsn(INVOKESPECIAL, className, methodName, methodInfo.descriptor, false);
         }
     }
 

@@ -98,11 +98,20 @@ public class JunkCodeClassVisitor extends BaseClassVisitor {
      */
     private void generateMethodParam() {
         for (int i = 0; i < context.getMethodCount(); i++) {
-            int index = random.nextInt(15);
-//            int index = 2;
+            int index = random.nextInt(16);
             String methodName = generateName(i);
             String junkClassName = getJunkClassName();
-            methodList.add(new GenerateMethodInfo(index, methodName, junkClassName, GenerateVMTool.getIntegerType()));
+            GenerateMethodInfo methodInfo = new GenerateMethodInfo(index, methodName, junkClassName, GenerateVMTool.getIntegerType());
+            if (index > 14) {
+                int paramSize = Math.max(1, random.nextInt(5));
+                StringBuilder descriptor = new StringBuilder();
+                for (int j = 0; j < paramSize; j++) {
+                    descriptor.append(context.getJunkClassNameList().get(random.nextInt(context.getJunkClassNameList().size())));
+                }
+                methodInfo.paramSize = paramSize;
+                methodInfo.descriptor = "(" + descriptor.toString() + ")V";
+            }
+            methodList.add(methodInfo);
         }
     }
 
@@ -158,6 +167,8 @@ public class JunkCodeClassVisitor extends BaseClassVisitor {
                 GenerateVMTool.method14(this, methodName, junkClassName);
             } else if (index == 14) {
                 GenerateVMTool.method15(this, methodName, junkClassName);
+            } else {
+                GenerateVMTool.method16(this, methodName, methodInfo.descriptor);
             }
         }
     }

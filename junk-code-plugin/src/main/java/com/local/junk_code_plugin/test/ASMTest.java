@@ -2,7 +2,6 @@ package com.local.junk_code_plugin.test;
 
 import com.local.junk_code_plugin.JunkCodeContext;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 
@@ -115,6 +114,10 @@ public class ASMTest {
         return context2;
     }
 
+    private void method16(JunkCodeContext context, Boolean context2, Float context3, Object object) {
+        System.out.println(getClass().getName());
+    }
+
     private void m1() {
         method1("1");
         System.out.println("end");
@@ -202,6 +205,11 @@ public class ASMTest {
 
     private void m15() {
         method15(null, null);
+        System.out.println("end");
+    }
+
+    private void m16() {
+        method16(null, null, null, null);
         System.out.println("end");
     }
 
