@@ -147,7 +147,7 @@ public class ASMTest {
     }
 
     private void m6() {
-        if (this.hashCode() == 0)
+        if (this.getClass().isPrimitive())
             method6((byte) 100, (byte) 100);
         System.out.println("end");
     }

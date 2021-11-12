@@ -390,12 +390,12 @@ public class GenerateVMTool {
             methodVisitor.visitLabel(label0);
         } else if (ifIndex == 4) {
             methodVisitor.visitVarInsn(ALOAD, 0);
-            methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "hashCode", "()I", false);
+            methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "getClass", "()Ljava/lang/Class;", false);
+            methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Class", "isPrimitive", "()Z", false);
             Label label0 = new Label();
-            methodVisitor.visitJumpInsn(IFNE, label0);
+            methodVisitor.visitJumpInsn(IFEQ, label0);
             joinMethodCode(methodVisitor, methodInfo, className);
             methodVisitor.visitLabel(label0);
-
         } else if (ifIndex == 5) {
             methodVisitor.visitVarInsn(ALOAD, 0);
             methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "getClass", "()Ljava/lang/Class;", false);
