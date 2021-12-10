@@ -16,11 +16,12 @@ import java.util.regex.Pattern;
  */
 public class JunkCodeContext extends BaseContext<JunkCodeExtension> {
 
-    private static final String[] defTypeArr = {"Ljava/lang/Byte;", "Ljava/lang/Integer;", "Ljava/lang/Long;", "Ljava/lang/Float;", "Ljava/lang/Boolean;", "Ljava/lang/String;"};
+    private static final String[] defTypeArr = {"Ljava/lang/Integer;", "Ljava/lang/Float;", "Ljava/lang/Boolean;", "Ljava/lang/String;"};
 
     private final List<Pattern> whiteListPattern = new ArrayList<>();
     private final List<Pattern> onlyJunkPattern = new ArrayList<>();
     private final List<String> junkClassNameList = new ArrayList<>();
+    private final List<Pattern> aRouterPattern = new ArrayList<>();//添加ARouter的父类
     private String prefix = null;//前缀
     private int fieldCount = 0;//属性数量
     private int methodCount = 0;//方法数量
@@ -34,6 +35,7 @@ public class JunkCodeContext extends BaseContext<JunkCodeExtension> {
         super.init();
         whiteListPattern.clear();
         onlyJunkPattern.clear();
+        aRouterPattern.clear();
         junkClassNameList.clear();
 
         final List<String> whiteList = extension.getWhiteList();
@@ -52,6 +54,14 @@ public class JunkCodeContext extends BaseContext<JunkCodeExtension> {
             }
             onlyJunkPattern.add(Pattern.compile(Utils.convertToPatternString(item)));
         }
+        final List<String> pathARouterList = extension.getPathARouterList();
+        for (String item : pathARouterList) {
+            if (item == null || "".equals(item.trim())) {
+                //ignore empty item
+                continue;
+            }
+            aRouterPattern.add(Pattern.compile(Utils.convertToPatternString(item)));
+        }
 
         junkClassNameList.addAll(extension.getJunkClassNameList());
         junkClassNameList.addAll(Arrays.asList(defTypeArr));
@@ -60,12 +70,13 @@ public class JunkCodeContext extends BaseContext<JunkCodeExtension> {
         fieldCount = extension.getFieldCount();
         methodCount = extension.getMethodCount();
 
-        getLogger().d("init", "prefix:" + prefix);
-        getLogger().d("init", "fieldCount:" + fieldCount);
-        getLogger().d("init", "methodCount:" + methodCount);
-        getLogger().d("init", "junkClassNameList:" + junkClassNameList);
-        getLogger().d("init", "onlyCheckList:" + onlyJunkPattern);
-        getLogger().d("init", "whiteList:" + whiteListPattern);
+        getLogger().i("init", "prefix:" + prefix);
+        getLogger().i("init", "fieldCount:" + fieldCount);
+        getLogger().i("init", "methodCount:" + methodCount);
+        getLogger().i("init", "junkClassNameList:" + junkClassNameList);
+        getLogger().i("init", "aRouterPattern:" + aRouterPattern);
+        getLogger().i("init", "onlyCheckList:" + onlyJunkPattern);
+        getLogger().i("init", "whiteList:" + whiteListPattern);
     }
 
     public void releaseContext() {
@@ -73,6 +84,7 @@ public class JunkCodeContext extends BaseContext<JunkCodeExtension> {
         whiteListPattern.clear();
         onlyJunkPattern.clear();
         junkClassNameList.clear();
+        aRouterPattern.clear();
     }
 
     public String getPrefix() {
@@ -91,6 +103,18 @@ public class JunkCodeContext extends BaseContext<JunkCodeExtension> {
         return junkClassNameList;
     }
 
+    public boolean needAddARouter(String className) {
+        if (aRouterPattern.isEmpty()) {
+            return false;
+        }
+        for (Pattern pattern : aRouterPattern) {
+            if (pattern.matcher(className).matches()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean needJunkClass(String className) {
         return this.needCheck(className);
     }
@@ -100,7 +124,7 @@ public class JunkCodeContext extends BaseContext<JunkCodeExtension> {
             return false;
         }
         if (onlyJunkPattern.isEmpty()) {
-            return true;
+            return false;
         }
         for (Pattern pattern : onlyJunkPattern) {
             if (pattern.matcher(param).matches()) {
@@ -109,6 +133,7 @@ public class JunkCodeContext extends BaseContext<JunkCodeExtension> {
         }
         return false;
     }
+
 
     private boolean isInWhiteList(String param) {
         for (Pattern pattern : whiteListPattern) {

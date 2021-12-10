@@ -10,6 +10,7 @@ import static org.objectweb.asm.Opcodes.BIPUSH;
 import static org.objectweb.asm.Opcodes.DCMPG;
 import static org.objectweb.asm.Opcodes.DCONST_0;
 import static org.objectweb.asm.Opcodes.DUP;
+import static org.objectweb.asm.Opcodes.GETFIELD;
 import static org.objectweb.asm.Opcodes.GETSTATIC;
 import static org.objectweb.asm.Opcodes.GOTO;
 import static org.objectweb.asm.Opcodes.I2L;
@@ -44,6 +45,7 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -69,6 +71,35 @@ public class GenerateVMTool {
 //        return methodName.length() % 2 == 0 ? INVOKESPECIAL : INVOKEVIRTUAL;
 //    }
 
+    static void printField(MethodVisitor methodVisitor, String className, List<GenerateFieldInfo> fieldList) {
+        if (fieldList.isEmpty()) return;
+        methodVisitor.visitVarInsn(ALOAD, 0);
+        methodVisitor.visitFieldInsn(GETFIELD, className, fieldList.get(0).fieldName, fieldList.get(0).junkClass);
+        Label label0 = new Label();
+        methodVisitor.visitJumpInsn(IFNULL, label0);
+        methodVisitor.visitLdcInsn(fieldList.get(0).fieldName);
+        methodVisitor.visitTypeInsn(NEW, "java/lang/StringBuilder");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "()V", false);
+        methodVisitor.visitLdcInsn("");
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
+
+        for (int i = 0; i < fieldList.size(); i++) {
+            GenerateFieldInfo info = fieldList.get(i);
+            methodVisitor.visitVarInsn(ALOAD, 0);
+            methodVisitor.visitFieldInsn(GETFIELD, className, info.fieldName, info.junkClass);
+            if (info.junkClass.equals("Ljava/lang/String;"))
+                methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
+            else
+                methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/Object;)Ljava/lang/StringBuilder;", false);
+        }
+
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;", false);
+        methodVisitor.visitMethodInsn(INVOKESTATIC, "android/util/Log", "d", "(Ljava/lang/String;Ljava/lang/String;)I", false);
+        methodVisitor.visitInsn(POP);
+        methodVisitor.visitLabel(label0);
+
+    }
 
     static void method1(ClassVisitor classVisitor, String methodName) {
         MethodVisitor methodVisitor = classVisitor.visitMethod(getMethodAccess(methodName), methodName, "(Ljava/lang/String;)V", null, null);

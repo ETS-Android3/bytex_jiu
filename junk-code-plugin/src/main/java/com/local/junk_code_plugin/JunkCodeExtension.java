@@ -19,6 +19,8 @@ public class JunkCodeExtension extends BaseExtension {
 
     private List<String> whiteList = new ArrayList<>();//白名单
 
+    private List<String> pathARouterList = new ArrayList<>();//添加ARouter的父类
+
     private List<String> junkClassNameList = new ArrayList<>();//用于生成属性与方法的自定义类类名
 
     private String prefix = "";//前缀
@@ -40,6 +42,14 @@ public class JunkCodeExtension extends BaseExtension {
 
     public void setWhiteList(List<String> whiteList) {
         this.whiteList = whiteList;
+    }
+
+    public List<String> getPathARouterList() {
+        return pathARouterList;
+    }
+
+    public void setPathARouterList(List<String> pathARouterList) {
+        this.pathARouterList = pathARouterList;
     }
 
     public String getPrefix() {

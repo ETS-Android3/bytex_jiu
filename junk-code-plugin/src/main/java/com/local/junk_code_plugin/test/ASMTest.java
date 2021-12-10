@@ -1,5 +1,6 @@
 package com.local.junk_code_plugin.test;
 
+import com.android.ddmlib.Log;
 import com.local.junk_code_plugin.JunkCodeContext;
 
 import java.util.Date;
@@ -14,13 +15,20 @@ public class ASMTest {
     private Short _b;
     private Integer _c;
     private Long _d;
-    private Float _e;
+    public Float _e;
     private Double _f;
     private Character _g;
     private Boolean _h;
     private String _i;
     private Object _j;
 
+    public void printField() {
+        if (_a != null) {
+            Log.d("dd", "" + _a + _c);
+        }
+
+        System.out.println("test!!");
+    }
 
     public void method1(String param) {
         long now = System.currentTimeMillis();

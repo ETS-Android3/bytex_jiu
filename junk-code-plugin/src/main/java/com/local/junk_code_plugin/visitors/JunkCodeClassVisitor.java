@@ -7,13 +7,19 @@ import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 import static org.objectweb.asm.Opcodes.ACC_STATIC;
 
+import com.android.tools.r8.code.S;
 import com.local.junk_code_plugin.JunkCodeContext;
 import com.ss.android.ugc.bytex.common.Constants;
+import com.ss.android.ugc.bytex.common.utils.TypeUtil;
 import com.ss.android.ugc.bytex.common.visitor.BaseClassVisitor;
 
+import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -27,12 +33,17 @@ public class JunkCodeClassVisitor extends BaseClassVisitor {
     private static final Random random = new Random();
     private static final Pattern p = Pattern.compile(".*\\d+.*");
     private static final char[] abc = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+    private static final String arouter = "Lcom/alibaba/android/arouter/facade/annotation/Route;";
 
     private final JunkCodeContext context;
     private boolean skip = false;//是否跳过
+    private boolean skipARouter = false;//是否跳过Arouter
     private String className = "";
+    private String superName = "";
+    private boolean fieldPrint = false;//是否打印了添加的属性
 
     private final List<GenerateMethodInfo> methodList = new ArrayList<>();
+    private final List<GenerateFieldInfo> fieldList = new ArrayList<>();
 
     public JunkCodeClassVisitor(JunkCodeContext context) {
         this.context = context;
@@ -44,17 +55,30 @@ public class JunkCodeClassVisitor extends BaseClassVisitor {
         int a = access & (ACC_PUBLIC | ACC_ABSTRACT | ACC_INTERFACE);
         skip = a == (ACC_PUBLIC | ACC_ABSTRACT | ACC_INTERFACE);
         className = name;
+        this.superName = superName;
         if (skip) {
             context.getLogger().d("skipClass", "className:" + className);
-        } else if (context.getMethodCount() > 0) {
-            generateMethodParam();
+        } else {
+            if (context.getFieldCount() > 0) {
+                generateFieldParam();
+            }
+            if (context.getMethodCount() > 0) {
+                generateMethodParam();
+            }
         }
+    }
+
+    @Override
+    public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
+        if (descriptor.equals(arouter))
+            skipARouter = true;
+        return super.visitAnnotation(descriptor, visible);
     }
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
         MethodVisitor methodVisitor = super.visitMethod(access, name, descriptor, signature, exceptions);
-        if (skip || ((access & ACC_STATIC) != 0) || name.equals("<init>") || p.matcher(name).matches())
+        if (skip || TypeUtil.isStatic(access) || name.equals("<init>") || p.matcher(name).matches())
             return methodVisitor;
         else {
 //            return methodVisitor;
@@ -62,11 +86,15 @@ public class JunkCodeClassVisitor extends BaseClassVisitor {
         }
     }
 
+
     @Override
     public void visitEnd() {
         if (skip) {
             super.visitEnd();
             return;
+        }
+        if (context.needAddARouter(superName) && !skipARouter) {
+            addARouterPath();
         }
         if (context.getFieldCount() > 0) {
             addJunkField();
@@ -89,6 +117,39 @@ public class JunkCodeClassVisitor extends BaseClassVisitor {
             GenerateMethodInfo methodInfo = methodList.get(random.nextInt(methodList.size()));
             GenerateVMTool.junkCodeMethod(mv, methodInfo, className);
             super.visitCode();
+            if (!fieldPrint) {
+                fieldPrint = true;
+                GenerateVMTool.printField(mv, className, fieldList);
+            }
+        }
+    }
+
+    /**
+     * 给Activity设置ARouter path
+     */
+    private void addARouterPath() {
+        StringBuilder sb = new StringBuilder("/");
+        int rI = random.nextInt(8);
+        for (int i = 0; i < Math.max(4, rI); i++) {
+            sb.append(abc[random.nextInt(abc.length)]);
+        }
+        sb.append("/");
+        for (int i = 0; i < Math.max(4, rI); i++) {
+            sb.append(abc[random.nextInt(abc.length)]);
+        }
+        AnnotationVisitor annotationVisitor0 = visitAnnotation(arouter, false);
+        annotationVisitor0.visit("path", sb.toString());
+        annotationVisitor0.visitEnd();
+    }
+
+    /**
+     * field param
+     */
+    private void generateFieldParam() {
+        List<String> junkClassNameList = context.getJunkClassNameList();
+        for (int i = 0; i < context.getFieldCount(); i++) {
+            GenerateFieldInfo info = new GenerateFieldInfo(generateName(i), junkClassNameList.get(random.nextInt(junkClassNameList.size())));
+            fieldList.add(info);
         }
     }
 
@@ -119,10 +180,10 @@ public class JunkCodeClassVisitor extends BaseClassVisitor {
      * 类添加属性
      */
     private void addJunkField() {
-        List<String> junkClassNameList = context.getJunkClassNameList();
         FieldVisitor fieldVisitor;
-        for (int i = 0; i < context.getFieldCount(); i++) {
-            fieldVisitor = visitField(i % 2 == 0 ? ACC_PRIVATE : ACC_PUBLIC, generateName(i), junkClassNameList.get(random.nextInt(junkClassNameList.size())), null, null);
+        for (int i = 0; i < fieldList.size(); i++) {
+            GenerateFieldInfo info = fieldList.get(i);
+            fieldVisitor = visitField(ACC_PUBLIC, info.fieldName, info.junkClass, null, null);
             fieldVisitor.visitEnd();
         }
     }
@@ -184,10 +245,13 @@ public class JunkCodeClassVisitor extends BaseClassVisitor {
     static String generateName(int index) {
         StringBuilder sb = new StringBuilder();
         int rI = random.nextInt(8);
-        for (int i = 0; i < 4 + rI; i++) {
+        for (int i = 0; i < Math.max(4, rI); i++) {
             sb.append(abc[random.nextInt(abc.length)]);
         }
         sb.append(index);
+        for (int i = 0; i < Math.max(4, rI); i++) {
+            sb.append(abc[random.nextInt(abc.length)]);
+        }
         return sb.toString();
     }
 }
