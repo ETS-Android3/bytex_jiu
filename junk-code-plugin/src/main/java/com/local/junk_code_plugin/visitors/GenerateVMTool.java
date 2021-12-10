@@ -1,5 +1,7 @@
 package com.local.junk_code_plugin.visitors;
 
+import com.local.junk_code_plugin.method.m1.ASMTest1;
+
 import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
 import static org.objectweb.asm.Opcodes.ACONST_NULL;
 import static org.objectweb.asm.Opcodes.ALOAD;
@@ -20,7 +22,6 @@ import static org.objectweb.asm.Opcodes.ICONST_1;
 import static org.objectweb.asm.Opcodes.IFEQ;
 import static org.objectweb.asm.Opcodes.IFGE;
 import static org.objectweb.asm.Opcodes.IFLE;
-import static org.objectweb.asm.Opcodes.IFNE;
 import static org.objectweb.asm.Opcodes.IFNONNULL;
 import static org.objectweb.asm.Opcodes.IFNULL;
 import static org.objectweb.asm.Opcodes.ILOAD;
@@ -51,7 +52,7 @@ import java.util.Random;
 /**
  * Created on 2021/9/1 18:50
  * VisitorMethod生成工具
- * {@link com.local.junk_code_plugin.test.ASMTest}
+ * {@link ASMTest1}
  */
 public class GenerateVMTool {
 

@@ -1,4 +1,4 @@
-package com.local.junk_code_plugin.test;
+package com.local.junk_code_plugin.method.m1;
 
 import com.android.ddmlib.Log;
 import com.local.junk_code_plugin.JunkCodeContext;
@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * Created on 2021/9/1 16:15
  */
-public class ASMTest {
+public class ASMTest1 {
 
     private Byte _a;
     private Short _b;
