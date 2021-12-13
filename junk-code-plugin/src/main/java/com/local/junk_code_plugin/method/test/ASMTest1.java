@@ -1,4 +1,4 @@
-package com.local.junk_code_plugin.method.m1;
+package com.local.junk_code_plugin.method.test;
 
 import com.android.ddmlib.Log;
 import com.local.junk_code_plugin.JunkCodeContext;

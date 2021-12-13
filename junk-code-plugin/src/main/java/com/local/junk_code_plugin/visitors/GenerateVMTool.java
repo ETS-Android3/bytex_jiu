@@ -1,6 +1,6 @@
 package com.local.junk_code_plugin.visitors;
 
-import com.local.junk_code_plugin.method.m1.ASMTest1;
+import com.local.junk_code_plugin.method.test.ASMTest1;
 
 import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
 import static org.objectweb.asm.Opcodes.ACONST_NULL;

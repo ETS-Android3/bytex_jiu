@@ -26,6 +26,7 @@ public class JunkCodeExtension extends BaseExtension {
     private String prefix = "";//前缀
     private int fieldCount = 0;//属性数量
     private int methodCount = 0;//方法数量
+    private int junkMethodCase = 0;//选择插入的方法
 
 
     public List<String> getOnlyJunkClassList() {
@@ -82,6 +83,14 @@ public class JunkCodeExtension extends BaseExtension {
 
     public void setJunkClassNameList(List<String> junkClassNameList) {
         this.junkClassNameList = junkClassNameList;
+    }
+
+    public int getJunkMethodCase() {
+        return junkMethodCase;
+    }
+
+    public void setJunkMethodCase(int junkMethodCase) {
+        this.junkMethodCase = junkMethodCase;
     }
 
     @Override

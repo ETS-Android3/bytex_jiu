@@ -31,7 +31,6 @@ import java.util.regex.Pattern;
 public class JunkCodeClassVisitor extends BaseClassVisitor {
 
     private static final Random random = new Random();
-    private static final Pattern p = Pattern.compile(".*\\d+.*");
     private static final char[] abc = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
     private static final String arouter = "Lcom/alibaba/android/arouter/facade/annotation/Route;";
 
@@ -78,7 +77,7 @@ public class JunkCodeClassVisitor extends BaseClassVisitor {
     @Override
     public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
         MethodVisitor methodVisitor = super.visitMethod(access, name, descriptor, signature, exceptions);
-        if (skip || TypeUtil.isStatic(access) || name.equals("<init>") || p.matcher(name).matches())
+        if (skip || TypeUtil.isStatic(access) || name.equals("<init>") || methodList.stream().anyMatch(it -> it.methodName.equals(name)))
             return methodVisitor;
         else {
 //            return methodVisitor;
@@ -114,8 +113,10 @@ public class JunkCodeClassVisitor extends BaseClassVisitor {
 
         @Override
         public void visitCode() {
-            GenerateMethodInfo methodInfo = methodList.get(random.nextInt(methodList.size()));
-            GenerateVMTool.junkCodeMethod(mv, methodInfo, className);
+//            if (context.getJunkMethodCase() == 0) {//
+//                GenerateMethodInfo methodInfo = methodList.get(random.nextInt(methodList.size()));
+//                GenerateVMTool.junkCodeMethod(mv, methodInfo, className);
+//            }
             super.visitCode();
             if (!fieldPrint) {
                 fieldPrint = true;
@@ -146,9 +147,8 @@ public class JunkCodeClassVisitor extends BaseClassVisitor {
      * field param
      */
     private void generateFieldParam() {
-        List<String> junkClassNameList = context.getJunkClassNameList();
         for (int i = 0; i < context.getFieldCount(); i++) {
-            GenerateFieldInfo info = new GenerateFieldInfo(generateName(i), junkClassNameList.get(random.nextInt(junkClassNameList.size())));
+            GenerateFieldInfo info = new GenerateFieldInfo(generateName(i), getJunkClassName());
             fieldList.add(info);
         }
     }
@@ -167,7 +167,7 @@ public class JunkCodeClassVisitor extends BaseClassVisitor {
                 int paramSize = Math.max(1, random.nextInt(5));
                 StringBuilder descriptor = new StringBuilder();
                 for (int j = 0; j < paramSize; j++) {
-                    descriptor.append(context.getJunkClassNameList().get(random.nextInt(context.getJunkClassNameList().size())));
+                    descriptor.append(getJunkClassName());
                 }
                 methodInfo.paramSize = paramSize;
                 methodInfo.descriptor = "(" + descriptor.toString() + ")V";

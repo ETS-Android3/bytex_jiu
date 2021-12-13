@@ -38,20 +38,20 @@ ByteX {
 }
 
 
-apply plugin: 'bytex.junk-code'
-junk_code_plugin {
-    fieldCount = 10
-    methodCount = 20
-    junkClassNameList = [
-            "Lcom/ss/android/ugc/bytex/example/log/LogTest;"
-    ]
-    onlyJunkClassList = [
-            "com/ss/android/ugc/bytex/example/junk/*"
-    ]
-    whiteList = [
-
-    ]
-}
+//apply plugin: 'bytex.junk-code'
+//junk_code_plugin {
+//    fieldCount = 10
+//    methodCount = 20
+//    junkClassNameList = [
+//            "Lcom/ss/android/ugc/bytex/example/log/LogTest;"
+//    ]
+//    onlyJunkClassList = [
+//            "com/ss/android/ugc/bytex/example/junk/*"
+//    ]
+//    whiteList = [
+//
+//    ]
+//}
 
 //apply plugin: 'bytex.access_inline'
 //access_inline {

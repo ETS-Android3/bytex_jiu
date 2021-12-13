@@ -25,6 +25,7 @@ public class JunkCodeContext extends BaseContext<JunkCodeExtension> {
     private String prefix = null;//前缀
     private int fieldCount = 0;//属性数量
     private int methodCount = 0;//方法数量
+    private int junkMethodCase = 0;//选择插入的方法
 
     public JunkCodeContext(Project project, AppExtension android, JunkCodeExtension extension) {
         super(project, android, extension);
@@ -69,7 +70,9 @@ public class JunkCodeContext extends BaseContext<JunkCodeExtension> {
         prefix = extension.getPrefix();
         fieldCount = extension.getFieldCount();
         methodCount = extension.getMethodCount();
+        junkMethodCase = extension.getJunkMethodCase();
 
+        getLogger().i("init", "junkMethodCase:" + junkMethodCase);
         getLogger().i("init", "prefix:" + prefix);
         getLogger().i("init", "fieldCount:" + fieldCount);
         getLogger().i("init", "methodCount:" + methodCount);
@@ -85,6 +88,10 @@ public class JunkCodeContext extends BaseContext<JunkCodeExtension> {
         onlyJunkPattern.clear();
         junkClassNameList.clear();
         aRouterPattern.clear();
+    }
+
+    public int getJunkMethodCase() {
+        return junkMethodCase;
     }
 
     public String getPrefix() {
