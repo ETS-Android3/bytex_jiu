@@ -1,36 +1,56 @@
 package com.local.junk_code_plugin.visitors;
 
-import java.util.Objects;
+import java.util.List;
 
-/**
- * Created on 2021/11/10 19:45
- */
 public class GenerateMethodInfo {
     public int index;
     public String methodName;
-    public String junkClass;
-    public String integerType;
-
+    public String returnType;
+    public int access;
+    public List<String> paramList;
     public String descriptor;
-    public int paramSize;
 
-    public GenerateMethodInfo(int index, String methodName, String junkClass, String integerType) {
+    public GenerateMethodInfo() {
+
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
         this.index = index;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public void setMethodName(String methodName) {
         this.methodName = methodName;
-        this.junkClass = junkClass;
-        this.integerType = integerType;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        GenerateMethodInfo that = (GenerateMethodInfo) o;
-        return methodName.equals(that.methodName);
+    public String getReturnType() {
+        return returnType;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(methodName);
+    public void setReturnType(String returnType) {
+        this.returnType = returnType;
+    }
+
+    public int getAccess() {
+        return access;
+    }
+
+    public void setAccess(int access) {
+        this.access = access;
+    }
+
+    public List<String> getParamList() {
+        return paramList;
+    }
+
+    public void setParamList(List<String> paramList) {
+        this.paramList = paramList;
     }
 }

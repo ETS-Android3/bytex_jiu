@@ -26,7 +26,8 @@ public class JunkCodeExtension extends BaseExtension {
     private String prefix = "";//前缀
     private int fieldCount = 0;//属性数量
     private int methodCount = 0;//方法数量
-    private int junkMethodCase = 0;//选择插入的方法
+    private int methodIndexMin = 0;//插入的方法最小下标
+    private int methodIndexMax = 10;//插入的方法最大下标
 
 
     public List<String> getOnlyJunkClassList() {
@@ -85,12 +86,20 @@ public class JunkCodeExtension extends BaseExtension {
         this.junkClassNameList = junkClassNameList;
     }
 
-    public int getJunkMethodCase() {
-        return junkMethodCase;
+    public int getMethodIndexMin() {
+        return methodIndexMin;
     }
 
-    public void setJunkMethodCase(int junkMethodCase) {
-        this.junkMethodCase = junkMethodCase;
+    public void setMethodIndexMin(int methodIndexMin) {
+        this.methodIndexMin = methodIndexMin;
+    }
+
+    public int getMethodIndexMax() {
+        return methodIndexMax;
+    }
+
+    public void setMethodIndexMax(int methodIndexMax) {
+        this.methodIndexMax = methodIndexMax;
     }
 
     @Override
