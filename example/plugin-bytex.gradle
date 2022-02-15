@@ -38,17 +38,20 @@ ByteX {
 }
 
 
-//apply plugin: 'bytex.junk-code'
-//junk_code_plugin {
-//    fieldCount = 10
-//    methodCount = 20
-//    junkClassNameList = [
-//            "Lcom/ss/android/ugc/bytex/example/log/LogTest;"
-//    ]
-//    onlyJunkClassList = [
-//            "com/ss/android/ugc/bytex/example/junk/*"
-//    ]
-//    whiteList = [
-//
-//    ]
-//}
+apply plugin: 'bytex.junk-code'
+junk_code_plugin {
+    methodIndexMin = 56
+    methodIndexMax = 58
+    fieldCount = 10
+    methodCount = 20
+    junkClassNameList = [
+            "com.ss.android.ugc.bytex.example.log.LogTest"
+    ]
+    onlyJunkClassList = [
+            "com.ss.android.ugc.bytex.example.MainActivity",
+            "com.ss.android.ugc.bytex.example.log.JunkClass"
+    ]
+    whiteList = [
+
+    ]
+}

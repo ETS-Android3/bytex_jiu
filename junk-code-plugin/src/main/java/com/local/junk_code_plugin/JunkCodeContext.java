@@ -40,7 +40,7 @@ public class JunkCodeContext extends BaseContext<JunkCodeExtension> {
         aRouterPattern.clear();
         junkClassNameList.clear();
 
-        final List<String> whiteList = extension.getWhiteList();
+        final List<String> whiteList = replacePoint(extension.getWhiteList());
         for (String item : whiteList) {
             if (item == null || "".equals(item.trim())) {
                 //ignore empty item
@@ -48,7 +48,7 @@ public class JunkCodeContext extends BaseContext<JunkCodeExtension> {
             }
             whiteListPattern.add(Pattern.compile(Utils.convertToPatternString(item)));
         }
-        final List<String> onlyCheckList = extension.getOnlyJunkClassList();
+        final List<String> onlyCheckList = replacePoint(extension.getOnlyJunkClassList());
         for (String item : onlyCheckList) {
             if (item == null || "".equals(item.trim())) {
                 //ignore empty item
@@ -56,7 +56,7 @@ public class JunkCodeContext extends BaseContext<JunkCodeExtension> {
             }
             onlyJunkPattern.add(Pattern.compile(Utils.convertToPatternString(item)));
         }
-        final List<String> pathARouterList = extension.getPathARouterList();
+        final List<String> pathARouterList = replacePoint(extension.getPathARouterList());
         for (String item : pathARouterList) {
             if (item == null || "".equals(item.trim())) {
                 //ignore empty item
@@ -65,7 +65,7 @@ public class JunkCodeContext extends BaseContext<JunkCodeExtension> {
             aRouterPattern.add(Pattern.compile(Utils.convertToPatternString(item)));
         }
 
-        junkClassNameList.addAll(extension.getJunkClassNameList());
+        junkClassNameList.addAll(replacePointAndAppend(extension.getJunkClassNameList()));
         junkClassNameList.addAll(Arrays.asList(defTypeArr));
 
         prefix = extension.getPrefix();
@@ -156,6 +156,33 @@ public class JunkCodeContext extends BaseContext<JunkCodeExtension> {
             }
         }
         return false;
+    }
+
+    private List<String> replacePoint(List<String> list) {
+        if (list.isEmpty())
+            return list;
+        List<String> pointList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            pointList.add(list.get(i).replace(".", "/"));
+        }
+        return pointList;
+    }
+
+    private List<String> replacePointAndAppend(List<String> list) {
+        if (list.isEmpty())
+            return list;
+        List<String> pointList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            String result = list.get(i).replace(".", "/");
+            if (!result.startsWith("L")) {
+                result = "L" + result;
+            }
+            if (!result.endsWith(";")) {
+                result = result + ";";
+            }
+            pointList.add(result);
+        }
+        return pointList;
     }
 
 }

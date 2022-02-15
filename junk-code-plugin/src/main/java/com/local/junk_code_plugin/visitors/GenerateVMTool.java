@@ -17,10 +17,14 @@ import static org.objectweb.asm.Opcodes.ARETURN;
 import static org.objectweb.asm.Opcodes.ASTORE;
 import static org.objectweb.asm.Opcodes.ATHROW;
 import static org.objectweb.asm.Opcodes.BIPUSH;
+import static org.objectweb.asm.Opcodes.CHECKCAST;
 import static org.objectweb.asm.Opcodes.DCMPG;
 import static org.objectweb.asm.Opcodes.DCMPL;
 import static org.objectweb.asm.Opcodes.DCONST_0;
+import static org.objectweb.asm.Opcodes.DLOAD;
+import static org.objectweb.asm.Opcodes.DSTORE;
 import static org.objectweb.asm.Opcodes.DUP;
+import static org.objectweb.asm.Opcodes.FCONST_0;
 import static org.objectweb.asm.Opcodes.GETFIELD;
 import static org.objectweb.asm.Opcodes.GETSTATIC;
 import static org.objectweb.asm.Opcodes.GOTO;
@@ -41,6 +45,7 @@ import static org.objectweb.asm.Opcodes.IFNULL;
 import static org.objectweb.asm.Opcodes.IF_ICMPGE;
 import static org.objectweb.asm.Opcodes.IF_ICMPLE;
 import static org.objectweb.asm.Opcodes.ILOAD;
+import static org.objectweb.asm.Opcodes.INSTANCEOF;
 import static org.objectweb.asm.Opcodes.INVOKEINTERFACE;
 import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
 import static org.objectweb.asm.Opcodes.INVOKESTATIC;
@@ -114,8 +119,8 @@ public class GenerateVMTool {
     }
 
     static void invokeMethod(ClassVisitor classVisitor, List<GenerateMethodInfo> methodList, List<GenerateFieldInfo> fieldList, String className, String methodName) {
-        GenerateFieldInfo fieldInfo = fieldList.get(0);
-        MethodVisitor methodVisitor = classVisitor.visitMethod(ACC_PRIVATE, methodName, "()V", null, null);
+        GenerateFieldInfo fieldInfo     = fieldList.get(0);
+        MethodVisitor     methodVisitor = classVisitor.visitMethod(ACC_PRIVATE, methodName, "()V", null, null);
         methodVisitor.visitCode();
         methodVisitor.visitVarInsn(ALOAD, 0);
         methodVisitor.visitFieldInsn(GETFIELD, className, fieldInfo.fieldName, fieldInfo.junkClass);
@@ -330,6 +335,51 @@ public class GenerateVMTool {
                 break;
             case 45:
                 m46(classVisitor, info, className);
+                break;
+            case 46:
+                m47(classVisitor, info, className);
+                break;
+            case 47:
+                m48(classVisitor, info, className);
+                break;
+            case 48:
+                m49(classVisitor, info, className);
+                break;
+            case 49:
+                m50(classVisitor, info, className);
+                break;
+            case 50:
+                m51(classVisitor, info, className);
+                break;
+            case 51:
+                m52(classVisitor, info, className);
+                break;
+            case 52:
+                m53(classVisitor, info, className);
+                break;
+            case 53:
+                m54(classVisitor, info, className);
+                break;
+            case 54:
+                m55(classVisitor, info, className);
+                break;
+            case 55:
+                m56(classVisitor, info, className);
+                break;
+            case 56:
+                m57(classVisitor, info, className);
+                break;
+            case 57:
+                m58(classVisitor, info, className);
+                break;
+            case 58:
+                m59(classVisitor, info, className);
+                break;
+            case 59:
+                m60(classVisitor, info, className);
+                break;
+            case 60:
+                m61(classVisitor, info, className);
                 break;
         }
     }
@@ -1487,6 +1537,416 @@ public class GenerateVMTool {
         methodVisitor.visitLabel(label0);
         generateMethodReturn(methodVisitor, method);
         methodVisitor.visitMaxs(2, 3);
+        methodVisitor.visitEnd();
+    }
+
+    static void m47(ClassVisitor classVisitor, GenerateMethodInfo method, String className) {
+        MethodVisitor methodVisitor = classVisitor.visitMethod(method.access, method.methodName, method.descriptor, null, null);
+        methodVisitor.visitCode();
+        methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/Math", "random", "()D", false);
+        methodVisitor.visitVarInsn(DSTORE, 2);
+        methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/Math", "random", "()D", false);
+        methodVisitor.visitVarInsn(DSTORE, 4);
+        methodVisitor.visitVarInsn(DLOAD, 2);
+        methodVisitor.visitVarInsn(DLOAD, 4);
+        methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/Math", "max", "(DD)D", false);
+        methodVisitor.visitVarInsn(DSTORE, 6);
+        methodVisitor.visitLdcInsn(method.methodName);
+        methodVisitor.visitTypeInsn(NEW, "java/lang/StringBuilder");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "()V", false);
+        methodVisitor.visitLdcInsn(":");
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
+        methodVisitor.visitVarInsn(DLOAD, 6);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(D)Ljava/lang/StringBuilder;", false);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;", false);
+        methodVisitor.visitMethodInsn(INVOKESTATIC, "android/util/Log", "d", "(Ljava/lang/String;Ljava/lang/String;)I", false);
+        methodVisitor.visitInsn(POP);
+        generateMethodReturn(methodVisitor, method);
+        methodVisitor.visitMaxs(4, 8);
+        methodVisitor.visitEnd();
+    }
+
+    static void m48(ClassVisitor classVisitor, GenerateMethodInfo method, String className) {
+        MethodVisitor methodVisitor = classVisitor.visitMethod(method.access, method.methodName, method.descriptor, null, null);
+        methodVisitor.visitCode();
+        methodVisitor.visitMethodInsn(INVOKESTATIC, "java/text/NumberFormat", "getInstance", "()Ljava/text/NumberFormat;", false);
+        methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/Math", "random", "()D", false);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/text/NumberFormat", "format", "(D)Ljava/lang/String;", false);
+        methodVisitor.visitVarInsn(ASTORE, 2);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        Label label0 = new Label();
+        methodVisitor.visitJumpInsn(IFNULL, label0);
+        methodVisitor.visitTypeInsn(NEW, "android/widget/TextView");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitInsn(ACONST_NULL);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "android/widget/TextView", "<init>", "(Landroid/content/Context;)V", false);
+        methodVisitor.visitVarInsn(ASTORE, 3);
+        methodVisitor.visitVarInsn(ALOAD, 3);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/widget/TextView", "setText", "(Ljava/lang/CharSequence;)V", false);
+        methodVisitor.visitLabel(label0);
+        generateMethodReturn(methodVisitor, method);
+        methodVisitor.visitMaxs(3, 4);
+        methodVisitor.visitEnd();
+    }
+
+    static void m49(ClassVisitor classVisitor, GenerateMethodInfo method, String className) {
+        MethodVisitor methodVisitor = classVisitor.visitMethod(method.access, method.methodName, method.descriptor, null, null);
+        methodVisitor.visitCode();
+        methodVisitor.visitMethodInsn(INVOKESTATIC, "java/text/NumberFormat", "getInstance", "()Ljava/text/NumberFormat;", false);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/text/NumberFormat", "getRoundingMode", "()Ljava/math/RoundingMode;", false);
+        methodVisitor.visitVarInsn(ASTORE, 2);
+        methodVisitor.visitTypeInsn(NEW, "java/math/BigDecimal");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitVarInsn(ALOAD, 1);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "toString", "()Ljava/lang/String;", false);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "java/math/BigDecimal", "<init>", "(Ljava/lang/String;)V", false);
+        methodVisitor.visitTypeInsn(NEW, "java/math/BigDecimal");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitInsn(ICONST_2);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "java/math/BigDecimal", "<init>", "(I)V", false);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/math/BigDecimal", "divide", "(Ljava/math/BigDecimal;Ljava/math/RoundingMode;)Ljava/math/BigDecimal;", false);
+        methodVisitor.visitVarInsn(ASTORE, 3);
+        methodVisitor.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+        methodVisitor.visitVarInsn(ALOAD, 3);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "print", "(Ljava/lang/Object;)V", false);
+        generateMethodReturn(methodVisitor, method);
+        methodVisitor.visitMaxs(4, 4);
+        methodVisitor.visitEnd();
+    }
+
+    static void m50(ClassVisitor classVisitor, GenerateMethodInfo method, String className) {
+        MethodVisitor methodVisitor = classVisitor.visitMethod(method.access, method.methodName, method.descriptor, null, null);
+        methodVisitor.visitCode();
+        methodVisitor.visitTypeInsn(NEW, "java/util/Timer");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "java/util/Timer", "<init>", "()V", false);
+        methodVisitor.visitVarInsn(ASTORE, 2);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitInsn(ACONST_NULL);
+        methodVisitor.visitInsn(LCONST_0);
+        methodVisitor.visitInsn(LCONST_0);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/util/Timer", "schedule", "(Ljava/util/TimerTask;JJ)V", false);
+        generateMethodReturn(methodVisitor, method);
+        methodVisitor.visitMaxs(6, 3);
+        methodVisitor.visitEnd();
+    }
+
+    static void m51(ClassVisitor classVisitor, GenerateMethodInfo method, String className) {
+        MethodVisitor methodVisitor = classVisitor.visitMethod(method.access, method.methodName, method.descriptor, null, null);
+        methodVisitor.visitCode();
+        methodVisitor.visitTypeInsn(NEW, "android/util/SparseArray");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "android/util/SparseArray", "<init>", "()V", false);
+        methodVisitor.visitVarInsn(ASTORE, 2);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitInsn(ICONST_0);
+        methodVisitor.visitVarInsn(ALOAD, 1);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "toString", "()Ljava/lang/String;", false);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/util/SparseArray", "put", "(ILjava/lang/Object;)V", false);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitInsn(ICONST_1);
+        methodVisitor.visitLdcInsn(method.methodName);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/util/SparseArray", "put", "(ILjava/lang/Object;)V", false);
+        generateMethodReturn(methodVisitor, method);
+        methodVisitor.visitMaxs(3, 3);
+        methodVisitor.visitEnd();
+    }
+
+    static void m52(ClassVisitor classVisitor, GenerateMethodInfo method, String className) {
+        MethodVisitor methodVisitor = classVisitor.visitMethod(method.access, method.methodName, method.descriptor, null, null);
+        methodVisitor.visitCode();
+        methodVisitor.visitTypeInsn(NEW, "android/util/ArrayMap");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "android/util/ArrayMap", "<init>", "()V", false);
+        methodVisitor.visitVarInsn(ASTORE, 2);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitLdcInsn(method.methodName);
+        methodVisitor.visitVarInsn(ALOAD, 1);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "toString", "()Ljava/lang/String;", false);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/util/ArrayMap", "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", false);
+        methodVisitor.visitInsn(POP);
+        generateMethodReturn(methodVisitor, method);
+        methodVisitor.visitMaxs(3, 3);
+        methodVisitor.visitEnd();
+    }
+
+    static void m53(ClassVisitor classVisitor, GenerateMethodInfo method, String className) {
+        MethodVisitor methodVisitor = classVisitor.visitMethod(method.access, method.methodName, method.descriptor, null, null);
+        methodVisitor.visitCode();
+        methodVisitor.visitVarInsn(ALOAD, 1);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "toString", "()Ljava/lang/String;", false);
+        methodVisitor.visitInsn(ICONST_0);
+        methodVisitor.visitMethodInsn(INVOKESTATIC, "android/util/Base64", "decode", "(Ljava/lang/String;I)[B", false);
+        methodVisitor.visitVarInsn(ASTORE, 2);
+        methodVisitor.visitLdcInsn(method.methodName);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitMethodInsn(INVOKESTATIC, "java/util/Arrays", "toString", "([B)Ljava/lang/String;", false);
+        methodVisitor.visitMethodInsn(INVOKESTATIC, "android/util/Log", "i", "(Ljava/lang/String;Ljava/lang/String;)I", false);
+        methodVisitor.visitInsn(POP);
+        generateMethodReturn(methodVisitor, method);
+        methodVisitor.visitMaxs(2, 3);
+        methodVisitor.visitEnd();
+    }
+
+    static void m54(ClassVisitor classVisitor, GenerateMethodInfo method, String className) {
+        MethodVisitor methodVisitor = classVisitor.visitMethod(method.access, method.methodName, method.descriptor, null, null);
+        methodVisitor.visitCode();
+        methodVisitor.visitTypeInsn(NEW, "java/util/ArrayList");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "java/util/ArrayList", "<init>", "()V", false);
+        methodVisitor.visitVarInsn(ASTORE, 2);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitTypeInsn(NEW, "android/util/Pair");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitVarInsn(ALOAD, 1);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "toString", "()Ljava/lang/String;", false);
+        methodVisitor.visitVarInsn(ALOAD, 1);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "toString", "()Ljava/lang/String;", false);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "android/util/Pair", "<init>", "(Ljava/lang/Object;Ljava/lang/Object;)V", false);
+        methodVisitor.visitMethodInsn(INVOKEINTERFACE, "java/util/List", "add", "(Ljava/lang/Object;)Z", true);
+        methodVisitor.visitInsn(POP);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitTypeInsn(NEW, "android/util/Pair");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitLdcInsn(method.methodName);
+        methodVisitor.visitVarInsn(ALOAD, 1);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "toString", "()Ljava/lang/String;", false);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "android/util/Pair", "<init>", "(Ljava/lang/Object;Ljava/lang/Object;)V", false);
+        methodVisitor.visitMethodInsn(INVOKEINTERFACE, "java/util/List", "add", "(Ljava/lang/Object;)Z", true);
+        methodVisitor.visitInsn(POP);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitTypeInsn(NEW, "android/util/Pair");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitTypeInsn(NEW, "java/lang/StringBuilder");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "()V", false);
+        methodVisitor.visitLdcInsn(method.methodName);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
+        methodVisitor.visitVarInsn(ALOAD, 1);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "toString", "()Ljava/lang/String;", false);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;", false);
+        methodVisitor.visitVarInsn(ALOAD, 1);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "toString", "()Ljava/lang/String;", false);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "android/util/Pair", "<init>", "(Ljava/lang/Object;Ljava/lang/Object;)V", false);
+        methodVisitor.visitMethodInsn(INVOKEINTERFACE, "java/util/List", "add", "(Ljava/lang/Object;)Z", true);
+        methodVisitor.visitInsn(POP);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitTypeInsn(NEW, "android/util/Pair");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitTypeInsn(NEW, "java/lang/StringBuilder");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "()V", false);
+        methodVisitor.visitVarInsn(ALOAD, 1);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "toString", "()Ljava/lang/String;", false);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
+        methodVisitor.visitLdcInsn(method.methodName);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;", false);
+        methodVisitor.visitVarInsn(ALOAD, 1);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "toString", "()Ljava/lang/String;", false);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "android/util/Pair", "<init>", "(Ljava/lang/Object;Ljava/lang/Object;)V", false);
+        methodVisitor.visitMethodInsn(INVOKEINTERFACE, "java/util/List", "add", "(Ljava/lang/Object;)Z", true);
+        methodVisitor.visitInsn(POP);
+        generateMethodReturn(methodVisitor, method);
+        methodVisitor.visitMaxs(5, 3);
+        methodVisitor.visitEnd();
+    }
+
+    static void m55(ClassVisitor classVisitor, GenerateMethodInfo method, String className) {
+        MethodVisitor methodVisitor = classVisitor.visitMethod(method.access, method.methodName, method.descriptor, null, null);
+        methodVisitor.visitCode();
+        methodVisitor.visitInsn(ACONST_NULL);
+        methodVisitor.visitInsn(ICONST_0);
+        methodVisitor.visitInsn(ACONST_NULL);
+        methodVisitor.visitMethodInsn(INVOKESTATIC, "android/view/ViewStub", "inflate", "(Landroid/content/Context;ILandroid/view/ViewGroup;)Landroid/view/View;", false);
+        methodVisitor.visitVarInsn(ASTORE, 2);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/view/View", "animate", "()Landroid/view/ViewPropertyAnimator;", false);
+        methodVisitor.visitInsn(POP);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/view/View", "callOnClick", "()Z", false);
+        methodVisitor.visitInsn(POP);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/view/View", "clearFocus", "()V", false);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/view/View", "clearAnimation", "()V", false);
+        generateMethodReturn(methodVisitor, method);
+        methodVisitor.visitMaxs(3, 3);
+        methodVisitor.visitEnd();
+    }
+
+    static void m56(ClassVisitor classVisitor, GenerateMethodInfo method, String className) {
+        MethodVisitor methodVisitor = classVisitor.visitMethod(method.access, method.methodName, method.descriptor, null, null);
+        methodVisitor.visitCode();
+        methodVisitor.visitInsn(ACONST_NULL);
+        methodVisitor.visitMethodInsn(INVOKESTATIC, "android/view/LayoutInflater", "from", "(Landroid/content/Context;)Landroid/view/LayoutInflater;", false);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/view/LayoutInflater", "getFactory", "()Landroid/view/LayoutInflater$Factory;", false);
+        methodVisitor.visitVarInsn(ASTORE, 2);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitLdcInsn(method.methodName);
+        methodVisitor.visitInsn(ACONST_NULL);
+        methodVisitor.visitInsn(ACONST_NULL);
+        methodVisitor.visitMethodInsn(INVOKEINTERFACE, "android/view/LayoutInflater$Factory", "onCreateView", "(Ljava/lang/String;Landroid/content/Context;Landroid/util/AttributeSet;)Landroid/view/View;", true);
+        methodVisitor.visitVarInsn(ASTORE, 3);
+        methodVisitor.visitVarInsn(ALOAD, 3);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/view/View", "requestLayout", "()V", false);
+        generateMethodReturn(methodVisitor, method);
+        methodVisitor.visitMaxs(3, 5);
+        methodVisitor.visitEnd();
+    }
+
+    static void m57(ClassVisitor classVisitor, GenerateMethodInfo method, String className) {
+        MethodVisitor methodVisitor = classVisitor.visitMethod(method.access, method.methodName, method.descriptor, null, null);
+        methodVisitor.visitCode();
+        methodVisitor.visitTypeInsn(NEW, "android/webkit/WebView");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitInsn(ACONST_NULL);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "android/webkit/WebView", "<init>", "(Landroid/content/Context;)V", false);
+        methodVisitor.visitVarInsn(ASTORE, 2);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitInsn(ACONST_NULL);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/webkit/WebView", "setWebViewClient", "(Landroid/webkit/WebViewClient;)V", false);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitInsn(ACONST_NULL);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/webkit/WebView", "setWebChromeClient", "(Landroid/webkit/WebChromeClient;)V", false);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/webkit/WebView", "canGoBack", "()Z", false);
+        Label label0 = new Label();
+        methodVisitor.visitJumpInsn(IFEQ, label0);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/webkit/WebView", "goBack", "()V", false);
+        methodVisitor.visitLabel(label0);
+        generateMethodReturn(methodVisitor, method);
+        methodVisitor.visitMaxs(3, 3);
+        methodVisitor.visitEnd();
+    }
+
+    static void m58(ClassVisitor classVisitor, GenerateMethodInfo method, String className) {
+        MethodVisitor methodVisitor = classVisitor.visitMethod(method.access, method.methodName, method.descriptor, null, null);
+        methodVisitor.visitCode();
+        methodVisitor.visitLdcInsn(method.methodName);
+        methodVisitor.visitTypeInsn(NEW, "java/lang/StringBuilder");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "()V", false);
+        methodVisitor.visitFieldInsn(GETSTATIC, "android/os/Build", "BRAND", "Ljava/lang/String;");
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
+        methodVisitor.visitFieldInsn(GETSTATIC, "android/os/Build", "DEVICE", "Ljava/lang/String;");
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
+        methodVisitor.visitFieldInsn(GETSTATIC, "android/os/Build", "MODEL", "Ljava/lang/String;");
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;", false);
+        methodVisitor.visitMethodInsn(INVOKESTATIC, "android/util/Log", "w", "(Ljava/lang/String;Ljava/lang/String;)I", false);
+        methodVisitor.visitInsn(POP);
+        methodVisitor.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+        methodVisitor.visitFieldInsn(GETSTATIC, "android/os/Build", "MANUFACTURER", "Ljava/lang/String;");
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "print", "(Ljava/lang/String;)V", false);
+        methodVisitor.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+        methodVisitor.visitVarInsn(ALOAD, 1);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "toString", "()Ljava/lang/String;", false);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "print", "(Ljava/lang/String;)V", false);
+        generateMethodReturn(methodVisitor, method);
+        methodVisitor.visitMaxs(3, 2);
+        methodVisitor.visitEnd();
+    }
+
+    static void m59(ClassVisitor classVisitor, GenerateMethodInfo method, String className) {
+        MethodVisitor methodVisitor = classVisitor.visitMethod(method.access, method.methodName, method.descriptor, null, null);
+        methodVisitor.visitCode();
+        methodVisitor.visitTypeInsn(NEW, "android/widget/ImageView");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitInsn(ACONST_NULL);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "android/widget/ImageView", "<init>", "(Landroid/content/Context;)V", false);
+        methodVisitor.visitVarInsn(ASTORE, 2);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitInsn(ICONST_0);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/widget/ImageView", "setVisibility", "(I)V", false);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/widget/ImageView", "getLayoutParams", "()Landroid/view/ViewGroup$LayoutParams;", false);
+        methodVisitor.visitVarInsn(ASTORE, 3);
+        methodVisitor.visitVarInsn(ALOAD, 3);
+        methodVisitor.visitTypeInsn(INSTANCEOF, "android/widget/FrameLayout$LayoutParams");
+        Label label0 = new Label();
+        methodVisitor.visitJumpInsn(IFEQ, label0);
+        methodVisitor.visitVarInsn(ALOAD, 3);
+        methodVisitor.visitTypeInsn(CHECKCAST, "android/widget/FrameLayout$LayoutParams");
+        methodVisitor.visitInsn(ICONST_0);
+        methodVisitor.visitFieldInsn(PUTFIELD, "android/widget/FrameLayout$LayoutParams", "bottomMargin", "I");
+        methodVisitor.visitLabel(label0);
+        generateMethodReturn(methodVisitor, method);
+        methodVisitor.visitMaxs(3, 4);
+        methodVisitor.visitEnd();
+    }
+
+    static void m60(ClassVisitor classVisitor, GenerateMethodInfo method, String className) {
+        MethodVisitor methodVisitor = classVisitor.visitMethod(method.access, method.methodName, method.descriptor, null, null);
+        methodVisitor.visitCode();
+        methodVisitor.visitTypeInsn(NEW, "android/widget/TextView");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitInsn(ACONST_NULL);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "android/widget/TextView", "<init>", "(Landroid/content/Context;)V", false);
+        methodVisitor.visitVarInsn(ASTORE, 2);
+        methodVisitor.visitTypeInsn(NEW, "android/widget/ImageView");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitInsn(ACONST_NULL);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "android/widget/ImageView", "<init>", "(Landroid/content/Context;)V", false);
+        methodVisitor.visitVarInsn(ASTORE, 3);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitVarInsn(ALOAD, 1);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "toString", "()Ljava/lang/String;", false);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/widget/TextView", "setText", "(Ljava/lang/CharSequence;)V", false);
+        methodVisitor.visitVarInsn(ALOAD, 3);
+        methodVisitor.visitInsn(ICONST_0);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/widget/ImageView", "setImageResource", "(I)V", false);
+        methodVisitor.visitTypeInsn(NEW, "android/widget/LinearLayout");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitInsn(ACONST_NULL);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "android/widget/LinearLayout", "<init>", "(Landroid/content/Context;)V", false);
+        methodVisitor.visitVarInsn(ASTORE, 4);
+        methodVisitor.visitVarInsn(ALOAD, 4);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/widget/LinearLayout", "addView", "(Landroid/view/View;)V", false);
+        methodVisitor.visitVarInsn(ALOAD, 4);
+        methodVisitor.visitVarInsn(ALOAD, 3);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/widget/LinearLayout", "addView", "(Landroid/view/View;)V", false);
+        generateMethodReturn(methodVisitor, method);
+        methodVisitor.visitMaxs(3, 5);
+        methodVisitor.visitEnd();
+    }
+
+    static void m61(ClassVisitor classVisitor, GenerateMethodInfo method, String className) {
+        MethodVisitor methodVisitor = classVisitor.visitMethod(method.access, method.methodName, method.descriptor, null, null);
+        methodVisitor.visitCode();
+        methodVisitor.visitTypeInsn(NEW, "android/view/View");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitInsn(ACONST_NULL);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "android/view/View", "<init>", "(Landroid/content/Context;)V", false);
+        methodVisitor.visitVarInsn(ASTORE, 2);
+        methodVisitor.visitTypeInsn(NEW, "android/graphics/Rect");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "android/graphics/Rect", "<init>", "()V", false);
+        methodVisitor.visitVarInsn(ASTORE, 3);
+        methodVisitor.visitTypeInsn(NEW, "android/view/TouchDelegate");
+        methodVisitor.visitInsn(DUP);
+        methodVisitor.visitVarInsn(ALOAD, 3);
+        methodVisitor.visitVarInsn(ALOAD, 2);
+        methodVisitor.visitMethodInsn(INVOKESPECIAL, "android/view/TouchDelegate", "<init>", "(Landroid/graphics/Rect;Landroid/view/View;)V", false);
+        methodVisitor.visitVarInsn(ASTORE, 4);
+        methodVisitor.visitVarInsn(ALOAD, 4);
+        methodVisitor.visitInsn(LCONST_0);
+        methodVisitor.visitInsn(LCONST_0);
+        methodVisitor.visitInsn(ICONST_0);
+        methodVisitor.visitInsn(FCONST_0);
+        methodVisitor.visitInsn(FCONST_0);
+        methodVisitor.visitInsn(ICONST_0);
+        methodVisitor.visitMethodInsn(INVOKESTATIC, "android/view/MotionEvent", "obtain", "(JJIFFI)Landroid/view/MotionEvent;", false);
+        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/view/TouchDelegate", "onTouchEvent", "(Landroid/view/MotionEvent;)Z", false);
+        methodVisitor.visitInsn(POP);
+        generateMethodReturn(methodVisitor, method);
+        methodVisitor.visitMaxs(9, 5);
         methodVisitor.visitEnd();
     }
 
