@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.bytedance.android.byteX</groupId>
+  <artifactId>GradleToolKit</artifactId>
+  <version>0.5.0</version>
+  <dependencies>
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-stdlib</artifactId>
+      <version>1.3.21</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.bytedance.android.byteX</groupId>
+      <artifactId>GradleEnvApi</artifactId>
+      <version>0.5.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.bytedance.android.build</groupId>
+      <artifactId>gradle-compat-api</artifactId>
+      <version>1.1.0.2</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.auto.service</groupId>
+      <artifactId>auto-service</artifactId>
+      <version>1.0-rc4</version>
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>guava</artifactId>
+          <groupId>*</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.bytedance.android.build</groupId>
+      <artifactId>gradle-compat-impl</artifactId>
+      <version>1.1.0.2</version>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+</project>
