@@ -40,10 +40,10 @@ ByteX {
 
 apply plugin: 'bytex.junk-code'
 junk_code_plugin {
-    methodIndexMin = 56
-    methodIndexMax = 58
+    methodIndexMin = 60
+    methodIndexMax = 84
     fieldCount = 10
-    methodCount = 20
+    methodCount = 90
     junkClassNameList = [
             "com.ss.android.ugc.bytex.example.log.LogTest"
     ]
